@@ -18,6 +18,12 @@ db = [
     },
 ]
 
+def countUsers():
+    x = set()
+    for e in db:
+        x.add(e['name'])
+    return len(x)
+
 @app.route("/")
 def hello():
     return "Hello, World!"
@@ -28,12 +34,14 @@ def status():
         {
             'status': True,
             'name': 'iMess',
-            'time': time.time(),
-            'time2': time.asctime(),
-            'time3': datetime.datetime.now(),
-            'time4': datetime.datetime.now().isoformat(),
-            'time5': datetime.datetime.fromtimestamp(time.time()),
-            'time6': datetime.datetime.fromtimestamp(time.time()).strftime('%H:%M'),
+            # 'time1': time.time(),
+            # 'time2': time.asctime(),
+            # 'time3': datetime.datetime.now(),
+            # 'time4': datetime.datetime.now().isoformat(),
+            # 'time5': datetime.datetime.fromtimestamp(time.time()),
+            'time': datetime.datetime.fromtimestamp(time.time()).strftime('%H:%M'),
+            'messages': len(db),
+            'users': countUsers(),
         }
     )
 
@@ -59,6 +67,13 @@ def send_message():
         'text': text,
         'time': time.time()
     })
+
+    if text == '/info':
+        db.append({
+            'name': 'BOT',
+            'text': 'I am bot, You are not bot!',
+            'time': time.time()
+        })
 
     return {'ok': True}
 
